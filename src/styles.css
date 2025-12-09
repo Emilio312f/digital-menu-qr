@@ -1,0 +1,83 @@
+/* Estilos globales modernos - Mobile First */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  /* Mejoras visuales móvil */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Smooth scrolling */
+  scroll-behavior: smooth;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  background: #0a0a0a;
+  color: #e5e5e5;
+  line-height: 1.6;
+  /* Prevenir pull-to-refresh en móviles */
+  overscroll-behavior-y: none;
+  /* Mejor rendering en móviles */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Optimización para notch de iPhone X+ */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+}
+
+/* Selección de texto */
+::selection {
+  background: rgba(212, 165, 116, 0.3);
+  color: #fff;
+}
+
+/* Scrollbar personalizado - solo desktop */
+@media (min-width: 1024px) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #1a1a1a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #404040;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #505050;
+  }
+}
+
+/* En móviles, ocultar scrollbar pero mantener funcionalidad */
+@media (max-width: 1023px) {
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+  background: #505050;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #404040 #1a1a1a;
+}
+

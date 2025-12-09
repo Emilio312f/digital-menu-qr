@@ -1,0 +1,193 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="header-content">
+      <div>
+        <h1 class="dashboard-title">Panel de Administración</h1>
+        @if (restaurant()) {
+          <p class="dashboard-subtitle">{{ restaurant()!.name }}</p>
+        }
+      </div>
+      <a [routerLink]="['/menu', restaurant()?.slug]" class="btn-preview">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        Vista previa
+      </a>
+    </div>
+  </header>
+
+  <div class="dashboard-content">
+    <!-- Stats Cards -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon visits">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Visitas totales</p>
+          <p class="stat-value">{{ stats().totalViews.toLocaleString() }}</p>
+          <p class="stat-change positive">+12% vs mes anterior</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon items">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 7h-9"></path>
+            <path d="M14 17H5"></path>
+            <circle cx="17" cy="17" r="3"></circle>
+            <circle cx="7" cy="7" r="3"></circle>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Platos en el menú</p>
+          <p class="stat-value">{{ stats().totalItems }}</p>
+          <p class="stat-change">Todos disponibles</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon categories">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Categorías activas</p>
+          <p class="stat-value">{{ stats().activeCategories }}</p>
+          <p class="stat-change">Entrantes, Principales, Postres, Bebidas</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon updated">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Última actualización</p>
+          <p class="stat-value">{{ stats().lastUpdated.toLocaleDateString() }}</p>
+          <p class="stat-change">Hace 2 días</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Actions -->
+    <section class="actions-section">
+      <div class="section-header">
+        <h2 class="section-title">Acciones rápidas</h2>
+      </div>
+
+      <div class="actions-grid">
+        <!-- Generador QR -->
+        <div class="action-card qr-card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+            </div>
+            <h3 class="card-title">Código QR</h3>
+          </div>
+          
+          @if (qrCodeUrl()) {
+            <div class="qr-container">
+              <div class="qr-code-wrapper">
+                <qrcode
+                  [qrdata]="qrCodeUrl()"
+                  [width]="qrCodeSize()"
+                  [errorCorrectionLevel]="'M'"
+                  [colorDark]="'#1a1a1a'"
+                  [colorLight]="'#ffffff'"
+                  [margin]="2">
+                </qrcode>
+              </div>
+              
+              <div class="qr-info">
+                <p class="qr-url">{{ qrCodeUrl() }}</p>
+                <p class="qr-description">Los clientes pueden escanear este código para ver el menú</p>
+              </div>
+
+              <div class="qr-actions">
+                <button (click)="downloadQR()" class="btn-secondary">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  Descargar QR
+                </button>
+                <button (click)="copyMenuLink()" class="btn-secondary">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copiar link
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Categorías Overview -->
+        <div class="action-card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+              </svg>
+            </div>
+            <h3 class="card-title">Distribución del menú</h3>
+          </div>
+
+          <div class="categories-list">
+            @for (category of getCategoryStats(); track category.name) {
+              <div class="category-stat">
+                <div class="category-info">
+                  <span class="category-emoji">{{ category.icon }}</span>
+                  <span class="category-label">{{ category.name }}</span>
+                </div>
+                <div class="category-count">
+                  <span class="count-badge">{{ category.available }}</span>
+                  <span class="count-text">platos</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Info Note -->
+    <section class="info-note">
+      <div class="note-icon">ℹ️</div>
+      <div class="note-content">
+        <h3 class="note-title">Modo demostración</h3>
+        <p class="note-text">
+          Este panel muestra las funcionalidades del dashboard. Para habilitar la edición completa del menú 
+          (agregar, editar, eliminar platos), necesitarás conectar un backend con Firebase o Supabase.
+        </p>
+      </div>
+    </section>
+  </div>
+</div>
